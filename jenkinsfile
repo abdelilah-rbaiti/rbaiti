@@ -8,15 +8,20 @@ pipeline {
                     branch: "main",
                     url: "https://github.com/ShaimaaMK/mrdevops_java_app.git"
                 )
-
-            
             }
         }
 
         stage ('Unit Test maven'){
-            steps {
+            steps{
                 script {
                     mvnTest()
+                }
+            }
+        }
+        stage ('Integration Test maven'){
+            steps{
+                script {
+                    mvnIntegrationTest()
 
                 }
 
