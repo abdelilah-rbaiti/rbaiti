@@ -75,7 +75,7 @@ pipeline {
             
             // Exécutez Trivy directement ici
                 sh """
-                trivy image ${hubUser}/${project}:${imageTag} > scan.txt
+                trivy image --timeout 15m ${hubUser}/${project}:${imageTag} > scan.txt
                 cat scan.txt
                 """
         }
