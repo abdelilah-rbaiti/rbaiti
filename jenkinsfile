@@ -75,11 +75,23 @@ pipeline {
             
             // Exécutez Trivy directement ici
                 sh """
-                trivy image --timeout 15m ${hubUser}/${project}:${imageTag} > scan.txt
+                trivy image ${hubUser}/${project}:${imageTag} > scan.txt
                 cat scan.txt
                 """
         }
     }
-}                
+
+} 
+stage('Docker Image Push : DockerHub '){
+         when { expression {  params.action == 'create' } }
+            steps{
+               script{
+                   
+                   dockerImagePush("${params.ImageName}","${params.ImageTag}","${params.DockerHubUser}")
+               }
+            }
+        }   
+
+
     }
 }
