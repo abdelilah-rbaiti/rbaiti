@@ -73,14 +73,20 @@ pipeline{
              }
          }
      stage('Docker Image Scan: trivy '){
-          when { expression {  params.action == 'create' } }
-             steps{
-                script{
-                   
-                    dockerImageScan("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
-                }
-             }
-         }
+         when { expression {  params.action == 'create' } }
+            steps{
+               script{
+               def aws_account_id = params.aws_account_id
+               def region = params.Region
+               def ecr_repoName = params.ECR_REPO_NAME
+               sh """
+               trivy image ${aws_account_id}.dkr.ecr.eu-north-1.amazonaws.com/${ecr_repoName}:latest > scan.txt
+               cat scan.txt
+               """
+        }
+    }
+
+} 
          stage('Docker Image Push : ECR '){
           when { expression {  params.action == 'create' } }
              steps{
