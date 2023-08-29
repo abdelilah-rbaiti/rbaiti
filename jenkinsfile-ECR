@@ -88,15 +88,19 @@ pipeline{
     }
 
 } 
-         stage('Docker Image Push : ECR '){
-          when { expression {  params.action == 'create' } }
-             steps{
-                script{
-                   
-                    dockerImagePush("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
-                }
-             }
-         }   
+         stage('Docker Image Push : ECR ') {
+    when { expression { params.action == 'create' } }
+    steps {
+        script {
+            withCredentials([string(credentialsId: 'aws-ecr-credentials', variable: 'AWS_PASSWORD')]) {
+                sh """
+                aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${params.aws_account_id}.dkr.ecr.eu-north-1.amazonaws.com
+                docker push ${params.aws_account_id}.dkr.ecr.eu-north-1.amazonaws.com/${params.ECR_REPO_NAME}:latest
+                """
+            }
+        }
+    }
+}
          stage('Docker Image Cleanup : ECR '){
           when { expression {  params.action == 'create' } }
              steps{
