@@ -11,6 +11,12 @@ pipeline{
         string(name: 'Region', description: "Region of ECR", defaultValue: ' eu-north-1')
         string(name: 'ECR_REPO_NAME', description: "name of the ECR", defaultValue: 'shaimaa')
 }
+environment{
+
+        ACCESS_KEY = AKIAVDIEYPD3DKUEQNED
+        SECRET_KEY = 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
+    }
+
 
     stages{
          
