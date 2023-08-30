@@ -11,7 +11,10 @@ pipeline{
         string(name: 'Region', description: "Region of ECR", defaultValue: ' eu-north-1')
         string(name: 'ECR_REPO_NAME', description: "name of the ECR", defaultValue: 'shaimaa')
 }
-
+environment {
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_KEY_ID')
+    }
 
     stages{
          
@@ -92,8 +95,8 @@ pipeline{
     when { expression { params.action == 'create' } }
     steps {
         script {
-            withCredentials([[$class: 'SecretTextBinding', credentialsId: 'credentials-id-key', variable: 'AWS_ACCESS_KEY_ID']]) {
-                withCredentials([[$class: 'SecretTextBinding', credentialsId: 'credentials-id-secret', variable: 'AWS_SECRET_ACCESS_KEY']]) {
+            withCredentials([[$class: 'SecretTextBinding', credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID']]) {
+                withCredentials([[$class: 'SecretTextBinding', credentialsId: 'AWS_SECRET_KEY_ID', variable: 'AWS_SECRET_ACCESS_KEY']]) {
                     sh """
                     aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${params.aws_account_id}.dkr.ecr.eu-north-1.amazonaws.com
                     docker push ${params.aws_account_id}.dkr.ecr.eu-north-1.amazonaws.com/${params.ECR_REPO_NAME}:latest
