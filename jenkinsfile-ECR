@@ -91,21 +91,22 @@ environment {
     }
 
 } 
-         stage('Docker Image Push : ECR ') {
+        
+stage('Docker Image Push : ECR ') {
     when { expression { params.action == 'create' } }
     steps {
         script {
-            withCredentials([[$class: 'SecretTextBinding', credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID']]) {
-                withCredentials([[$class: 'SecretTextBinding', credentialsId: 'AWS_SECRET_KEY_ID', variable: 'AWS_SECRET_ACCESS_KEY']]) {
-                    sh """
-                    aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${params.aws_account_id}.dkr.ecr.eu-north-1.amazonaws.com
-                    docker push ${params.aws_account_id}.dkr.ecr.eu-north-1.amazonaws.com/${params.ECR_REPO_NAME}:latest
-                    """
-                }
-            }
+          withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY', credentialsId: 'aws_credentials']]) {
+    sh """
+        aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${params.aws_account_id}.dkr.ecr.eu-north-1.amazonaws.com
+        docker push ${params.aws_account_id}.dkr.ecr.eu-north-1.amazonaws.com/${params.ECR_REPO_NAME}:latest
+    """
+
         }
     }
 }
+}
+
          stage('Docker Image Cleanup : ECR '){
           when { expression {  params.action == 'create' } }
              steps{
