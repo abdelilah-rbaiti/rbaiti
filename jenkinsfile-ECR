@@ -92,11 +92,13 @@ pipeline{
     when { expression { params.action == 'create' } }
     steps {
         script {
-            withCredentials([string(credentialsId: 'aws-ecr-credentials', variable: 'AWS_PASSWORD')]) {
-                sh """
-                aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${params.aws_account_id}.dkr.ecr.eu-north-1.amazonaws.com
-                docker push ${params.aws_account_id}.dkr.ecr.eu-north-1.amazonaws.com/${params.ECR_REPO_NAME}:latest
-                """
+            withCredentials([[$class: 'SecretTextBinding', credentialsId: 'credentials-id-key', variable: 'AWS_ACCESS_KEY_ID']]) {
+                withCredentials([[$class: 'SecretTextBinding', credentialsId: 'credentials-id-secret', variable: 'AWS_SECRET_ACCESS_KEY']]) {
+                    sh """
+                    aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${params.aws_account_id}.dkr.ecr.eu-north-1.amazonaws.com
+                    docker push ${params.aws_account_id}.dkr.ecr.eu-north-1.amazonaws.com/${params.ECR_REPO_NAME}:latest
+                    """
+                }
             }
         }
     }
