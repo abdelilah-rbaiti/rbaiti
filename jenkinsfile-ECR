@@ -11,10 +11,6 @@ pipeline{
         string(name: 'Region', description: "Region of ECR", defaultValue: ' eu-north-1')
         string(name: 'ECR_REPO_NAME', description: "name of the ECR", defaultValue: 'shaimaa')
 }
-environment {
-        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
-        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_KEY_ID')
-    }
 
     stages{
          
