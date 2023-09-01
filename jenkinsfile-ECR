@@ -121,8 +121,8 @@ pipeline{
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws_credentials', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                     sh """
                         terraform init 
-                        terraform plan -var 'access_key=$AWS_ACCESS_KEY_ID' -var 'secret_key=$AWS_SECRET_ACCESS_KEY' -var 'region=${params.Region}' --var-file=./config/terraform.tfvars
-                        terraform apply -var 'access_key=$AWS_ACCESS_KEY_ID' -var 'secret_key=$AWS_SECRET_ACCESS_KEY' -var 'region=${params.Region}' --var-file=./config/terraform.tfvars --auto-approve
+                        terraform plan -var 'access_key=$AWS_ACCESS_KEY_ID' -var 'secret_key=$AWS_SECRET_ACCESS_KEY' -var 'region=eu-north-1' --var-file=./config/terraform.tfvars
+                        terraform apply -var 'access_key=$AWS_ACCESS_KEY_ID' -var 'secret_key=$AWS_SECRET_ACCESS_KEY' -var 'region=eu-north-1' --var-file=./config/terraform.tfvars --auto-approve
                     """
                 }
             }
