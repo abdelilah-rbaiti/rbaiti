@@ -130,11 +130,10 @@ pipeline{
     }
 }
 stage('Connect to EKS '){
-            when { expression {  params.action == 'create' } }
-        steps{
-
-            script{
-
+    when { expression {  params.action == 'create' } }
+    steps{
+        script{
+            withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws_credentials', accessKeyVariable: 'ACCESS_KEY', secretKeyVariable: 'SECRET_KEY']]) {
                 sh """
                 aws configure set aws_access_key_id "$ACCESS_KEY"
                 aws configure set aws_secret_access_key "$SECRET_KEY"
@@ -143,7 +142,9 @@ stage('Connect to EKS '){
                 """
             }
         }
-        } 
+    }
+}
+
 
     } 
 
