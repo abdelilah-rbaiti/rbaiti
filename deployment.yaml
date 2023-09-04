@@ -14,11 +14,12 @@ spec:
     spec:
       containers:
       - name: myjavaapp
-        image: 496157679619.dkr.ecr.us-east-1.amazonaws.com/vikashashoke:latest
+        image: 350586697974.dkr.ecr.eu-north-1.amazonaws.com/shaimaa:latest
         ports:
         - containerPort: 8080
         workingDir: /app
-
+      imagePullSecrets:
+      - name: ecr-registry-key
 
 ---
 apiVersion: v1
@@ -33,3 +34,4 @@ spec:
     port: 80
     targetPort: 8080
   type: LoadBalancer
+
