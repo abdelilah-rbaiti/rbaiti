@@ -174,11 +174,11 @@ stage('ZAP Scan') {
         script {
             withCredentials([string(credentialsId: 'api_key', variable: 'ZAP_API_KEY')]) {
                 sh """
-                    /home/shama/.local/bin/zap-cli --api-key $ZAP_API_KEY start
-                    /home/shama/.local/bin/zap-cli --api-key $ZAP_API_KEY open-url http://a8076801dfdc94a008a9e5549ba3b07e-1507062584.eu-north-1.elb.amazonaws.com/home/data
-                    /home/shama/.local/bin/zap-cli --api-key $ZAP_API_KEY active-scan --scanners all http://a8076801dfdc94a008a9e5549ba3b07e-1507062584.eu-north-1.elb.amazonaws.com/home/data
-                    /home/shama/.local/bin/zap-cli --api-key $ZAP_API_KEY alerts
-                    /home/shama/.local/bin/zap-cli --api-key $ZAP_API_KEY stop
+                    zap-cli --api-key $ZAP_API_KEY start
+                    zap-cli --api-key $ZAP_API_KEY open-url http://a8076801dfdc94a008a9e5549ba3b07e-1507062584.eu-north-1.elb.amazonaws.com/home/data
+                    zap-cli --api-key $ZAP_API_KEY active-scan --scanners all http://a8076801dfdc94a008a9e5549ba3b07e-1507062584.eu-north-1.elb.amazonaws.com/home/data
+                    zap-cli --api-key $ZAP_API_KEY alerts
+                    zap-cli --api-key $ZAP_API_KEY stop
                 """
             }
         }
