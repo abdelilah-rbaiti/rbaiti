@@ -55,24 +55,24 @@ pipeline{
             // }
         // }
     
-         stage('Maven Build : maven'){
-          when { expression {  params.action == 'create' } }
-             steps{
-                script{
+         //stage('Maven Build : maven'){
+          //when { expression {  params.action == 'create' } }
+            // steps{
+              //  script{
                    
-                    mvnBuild()
-                }
-             }
-         }
-         stage('Docker Image Build : ECR'){
-          when { expression {  params.action == 'create' } }
-             steps{
-                script{
+                //    mvnBuild()
+              //  }
+            // }
+        // }
+        // stage('Docker Image Build : ECR'){
+          //when { expression {  params.action == 'create' } }
+            // steps{
+              //  script{
                    
-                    dockerBuild("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
-                }
-             }
-         }
+                //    dockerBuild("${params.aws_account_id}","${params.Region}","${params.ECR_REPO_NAME}")
+             //   }
+           //  }
+       //  }
   //   stage('Docker Image Scan: trivy '){
     //     when { expression {  params.action == 'create' } }
       //      steps{
@@ -89,20 +89,20 @@ pipeline{
 
 //} 
         
-stage('Docker Image Push : ECR ') {
-    when { expression { params.action == 'create' } }
-    steps {
-        script {
-          withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY', credentialsId: 'aws_credentials']]) {
-    sh """
-        aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${params.aws_account_id}.dkr.ecr.eu-north-1.amazonaws.com
-        docker push ${params.aws_account_id}.dkr.ecr.eu-north-1.amazonaws.com/${params.ECR_REPO_NAME}:latest
-    """
+//stage('Docker Image Push : ECR ') {
+  //  when { expression { params.action == 'create' } }
+    //steps {
+      //  script {
+        //  withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY', credentialsId: 'aws_credentials']]) {
+  //  sh """
+    //    aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin ${params.aws_account_id}.dkr.ecr.eu-north-1.amazonaws.com
+      //  docker push ${params.aws_account_id}.dkr.ecr.eu-north-1.amazonaws.com/${params.ECR_REPO_NAME}:latest
+   // """
 
-        }
-    }
-}
-}
+     //   }
+   // }
+//}
+//}
 
         // stage('Docker Image Cleanup : ECR '){
         //  when { expression {  params.action == 'create' } }
@@ -166,7 +166,8 @@ stage('Deployment on EKS Cluster'){
                   }
                 }
             }
-        }  
+        }
+
 stage('ZAP Scan') {
      when { expression { params.action == 'create' } }
     steps {
