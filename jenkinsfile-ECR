@@ -167,23 +167,23 @@ stage('Deployment on EKS Cluster'){
                 }
             }
         }  
-stage('DAST with OWASP ZAP') {
-    when { expression { params.action == 'create' } }
+stage('ZAP Scan') {
+     when { expression { params.action == 'create' } }
     steps {
         script {
-            sh "zap.sh -daemon -port 8090 -host 0.0.0.0"
-            sh """
-                curl -X POST "http://localhost:8090/JSON/ascan/action/scan/?apikey=n4alf7k9ncrjf56flter5cm04l&url=http://a8076801dfdc94a008a9e5549ba3b07e-1507062584.eu-north-1.elb.amazonaws.com/home/data
-&recurse=true"
-            """            
-            sh """
-                curl "http://localhost:8090/OTHER/core/other/jsonreport/?apikey=n4alf7k9ncrjf56flter5cm04l" > zap_report.json
-            """
-            sh "curl -X POST 'http://localhost:8090/JSON/core/action/shutdown/?apikey=n4alf7k9ncrjf56flter5cm04l'"
+            withCredentials([string(credentialsId: 'api_key', variable: 'ZAP_API_KEY')]) {
+                sh """
+                    zap-cli --api-key $ZAP_API_KEY start
+                    zap-cli --api-key $ZAP_API_KEY open-url http://a8076801dfdc94a008a9e5549ba3b07e-1507062584.eu-north-1.elb.amazonaws.com/home/data
+                    zap-cli --api-key $ZAP_API_KEY active-scan --scanners all http://a8076801dfdc94a008a9e5549ba3b07e-1507062584.eu-north-1.elb.amazonaws.com/home/data
+                    zap-cli --api-key $ZAP_API_KEY alerts
+                    zap-cli --api-key $ZAP_API_KEY stop
+                """
+            }
         }
     }
 }
-    } 
-
 }
+}
+
 
