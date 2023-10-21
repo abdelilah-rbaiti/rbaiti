@@ -1,1 +1,23 @@
+library identifier: 'library-jenkins',
+        retriever: modernSCM([
+            $class: 'GitSCMSource',
+            credentialsId: 'TOKEN-JENKINS',
+            remote: 'https://github.com/abdelilah-rbaiti/library-jenkins',
+            traits: [gitBranchDiscovery()]
+        ])
+pipeline {
+    agent any
+    stages {
+        stage('Git Checkout') {
+            steps {
+                script {
+                    gitCheckout(
+                        branch: 'main',
+                        url: 'https://github.com/abdelilah-rbaiti/Rb.git'
+                    )
+                }
+            }
+        }
+    }
+}
 
