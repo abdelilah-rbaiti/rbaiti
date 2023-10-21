@@ -1,10 +1,4 @@
-library identifier: 'library-jenkins',
-        retriever: modernSCM([
-            $class: 'GitSCMSource',
-            credentialsId: 'TOKEN-JENKINS',
-            remote: 'https://github.com/abdelilah-rbaiti/library-jenkins',
-            traits: [gitBranchDiscovery()]
-        ])
+@Library('library-jenkins') _
 pipeline {
     agent any
     stages {
