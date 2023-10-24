@@ -20,6 +20,13 @@ pipeline {
                 }
             }
         }
+        stage('Integration Tests') {
+            steps {
+                script {
+                    // Build and run integration tests
+                    sh 'mvn verify'
+            }
+        }
     }
 }
 
