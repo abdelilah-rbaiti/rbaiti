@@ -3,31 +3,29 @@ pipeline {
     agent any
     stages {
         stage('Git Checkout') {
-            steps {
-                script {
-                    gitCheckout(
-                        branch: 'main',
-                        url: 'https://github.com/abdelilah-rbaiti/Rb.git'
-                    )
+                steps {
+                    script {
+                        gitCheckout(
+                            branch: 'main',
+                            url: 'https://github.com/abdelilah-rbaiti/Rb.git'
+                        )
+                    }
+                }
+            } 
+                 stage('Unit Tests') {
+                    steps {
+                        script {
+                            myUnitTests.runUnitTests()
                 }
             }
         }
-    
-        stage('Unit Tests') {
-            steps {
-                script {
-                    sh 'mvn clean test'
+                stage('Integration Tests') {
+                    steps {
+                        script {                    
+                            myIntegrationTests.runIntegrationTests()
                 }
             }
         }
-        stage('Integration Tests') {
-            steps {
-                script {
-                    // Build and run integration tests
-                    sh 'mvn verify'
-            }
-        }
-    }
     }
 }
 
