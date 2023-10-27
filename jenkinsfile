@@ -26,14 +26,12 @@ pipeline {
                 }
             }
         }
-                stage('Static code analysis: Sonarqube'){
-                    steps{
-                         script{
-                            def SonarQubecredentialsId = 'jenkins-sonar'
-                           statiCodeAnalysis(SonarQubecredentialsId)
-               }
+              stage('SonarQube Analysis') {
+            steps {
+                sonarqube(sonarServer: 'sonarqube-jenkins') // No need to specify the credential ID here
             }
         }
+
     }
 }
 
